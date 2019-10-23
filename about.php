@@ -35,11 +35,9 @@
 	</div>
 	<div id="content">
 		<h2>About</h2>
-		<?php
-			$myfile = fopen("about.txt", "r") or die("Unable to open file!");
-			echo fread($myfile,filesize("about.txt"));
-			fclose($myfile);
-		?> 
+		<p>
+			
+		</p>
 	</div>
 	<div id="footer">
 		

@@ -35,11 +35,8 @@
 	</div>
 	<div id="content">
 		<h2>Episodes</h2>
-		<?php
-			$myfile = fopen("episodes.txt", "r") or die("Unable to open file!");
-			echo fread($myfile,filesize("episodes.txt"));
-			fclose($myfile);
-		?> 
+		<p>Episode 0</p>
+		<p><iframe width="25%" height="265" src="https://www.youtube-nocookie.com/embed/C0DPdy98e4c" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></p>
 	</div>
 	<div id="footer">
 		

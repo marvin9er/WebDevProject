@@ -2,6 +2,10 @@
 
 ?>
 
+
+
+
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -20,11 +24,9 @@
 		</ul>
 	</div>
 	<div id="content">
-		<?php
-			$myfile = fopen("index.txt", "r") or die("Unable to open file!");
-			echo fread($myfile,filesize("index.txt"));
-			fclose($myfile);
-		?> 
+		<p>
+			
+		</p>
 	</div>
 	<div id="footer">
 		
