@@ -25,11 +25,6 @@
 	</div>
 	<div id="content">
 		<h2>FAQ</h2>
-		<?php
-			$myfile = fopen("faq.txt", "r") or die("Unable to open file!");
-			echo fread($myfile,filesize("faq.txt"));
-			fclose($myfile);
-		?> 
 	</div>
 	<div id="footer">
 		
