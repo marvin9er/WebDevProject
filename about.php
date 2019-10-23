@@ -1,15 +1,5 @@
 <?php 
-	$podcast_names = [
-		'BJ²', 
-		'Autism Lite', 
-		'The Random Shit Burrito', 
-		'Grand Stimulation Center', 
-		'3 dudes 1 mic', 
-		'Whole Lotta weird'
-	];
 
-
-	$name_number = rand(0, count($podcast_names)-1);
 ?>
 
 
@@ -19,11 +9,11 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title><?=$podcast_names[$name_number]?></title>
+	<title>BJ²</title>
 </head>
 <body>
 	<div id="header">
-		<h1><?=$podcast_names[$name_number]?></h1>
+		<h1>BJ²</h1>
 	</div>
 	<div id="menubar">
 		<ul>
