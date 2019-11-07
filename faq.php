@@ -9,25 +9,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<title>BJ²</title>
+	<title>Awakening | FAQ</title>
+	<link rel="icon" type="image/png" href="Utilities/icon.png" />
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+	<link href="https://fonts.googleapis.com/css?family=Finger+Paint&display=swap" rel="stylesheet"> 
+	<link rel="stylesheet" type="text/css" href="extraCSS.css">
 </head>
 <body>
-	<div id="header">
-		<h1>BJ²</h1>
-	</div>
-	<div id="menubar">
-		<ul>
-			<li><a href="index.php">Home</a></li>
-			<li><a href="about.php">About</a></li>
-			<li><a href="episodes.php">Episodes</a></li>
-			<li><a href="faq.php">FAQ</a></li>
-		</ul>
-	</div>
-	<div id="content">
-		<h2>FAQ</h2>
-	</div>
-	<div id="footer">
-		
+	<div id="mainContainer" class="container">
+		<div class="jumbotron">
+			<h1 class="display-4" id="fontChange"><a href="index.php">AWAKENING</a></h1>
+		</div>	
+		<div id="menubar">
+		<nav aria-label="breadcrumb">
+			<ol class="breadcrumb">
+				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
+				<li class="breadcrumb-item"><a href="about.php">About</a></li>
+				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
+				<li class="breadcrumb-item"><a href="News.php">News</a></li>
+				<li class="breadcrumb-item active" aria-current="page">FAQ</li>
+			</ol>
+		</nav>
+		<div id="content">
+			<h2>FAQ</h2>
+		</div>
 	</div>
 </body>
 </html>
