@@ -1,0 +1,55 @@
+.jumbotron
+{
+	margin-top: 15px;
+	background: lightgrey;
+	background-image: url(Utilities/header.png);
+	background-size: cover;
+	border: solid 1px #540800;
+}
+
+#mainContainer
+{
+	background: #BEBFC1;
+	overflow:auto;
+	height: 100vh;
+}
+
+#fontChange
+{
+    font-family: 'Finger Paint', cursive;
+   	-webkit-text-stroke-width: 1px;
+   	-webkit-text-stroke-color: black;
+}
+
+.breadcrumb
+{
+	border: solid 1px #540800;
+}
+
+.breadcrumb-item.active
+{
+	color: black;
+}
+
+body
+{
+	background: #550000;
+	background-image: url(Utilities/background.png);
+}
+
+a
+{
+	color: #780000;
+}
+
+a:hover
+{
+	text-decoration: none;
+	color: #FF1500;
+	transition: 1s;
+}
+
+img
+{
+	width: 50vw;
+}
