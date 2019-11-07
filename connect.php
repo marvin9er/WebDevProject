@@ -1,5 +1,5 @@
 <?php
-    define('DB_DSN','mysql:host=localhost:3306;dbname=webdevproject');
+    define('DB_DSN','mysql:host=localhost;dbname=webdevproject');
     define('DB_USER','id11413473_bjadmin');
     define('DB_PASS','ZIBA6fFyjDTn&3uiCk2#');     
     	
