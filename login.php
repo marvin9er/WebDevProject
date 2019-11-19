@@ -1,7 +1,8 @@
 <?php
 	if (isset($_COOKIE["User"]))
 	{
-		header('Location: http://localhost:31337/WebDevProject/index.php');
+		header('Location: http://localhost:31337/WebDevProject/index.php');		
+		die();
 	}
 ?>
 
