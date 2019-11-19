@@ -1,7 +1,33 @@
 <?php 
 	include 'connect.php';
 
+	if (isset($_COOKIE["User"])) {
+		session_start();
+
+		if(!filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) && !filter_input(INPUT_GET, 'delete', FILTER_VALIDATE_INT) && $_SESSION['isAdmin'] == 1)
+		{
+			$errorflag = true;
+		}else
+		{
+			$postID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+			$delete = filter_input(INPUT_GET, 'delete', FILTER_SANITIZE_NUMBER_INT);
+
+			if(isset($postID) && isset($delete) && $delete == 1)
+			{
+				$id = $postID;
+        		$stmt = $db->prepare( "DELETE FROM posts WHERE postID =:id" );
+        		$stmt->bindParam(':id', $id);
+        		$stmt->execute();
+        		if( ! $stmt->rowCount() ) echo "Deletion failed";
+			}
+		}
+	}
+
 	$count = 0;
+
+    $errorflag = false;
+
+	
 
 	$query = "SELECT * FROM posts WHERE title NOT LIKE '%Episode%' AND title NOT LIKE 'About' ORDER BY date_posted DESC;";
     $statement = $db->prepare($query);
@@ -33,17 +59,29 @@
 				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
 				<li class="breadcrumb-item active" aria-current="page">News</li>
 				<li class="breadcrumb-item"><a href="faq.php">FAQ</a></li>
+				<?php if (isset($_COOKIE["User"])):?>
+					<li class="breadcrumb-item"><a href="signout.php">Sign Out</a></li>
+				<?php else: ?>
+					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
+				<?php endif ?>
 			</ol>
 		</nav>
 
-		<div id="content">
+		<div id="content">			
+			<?php 
+				if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+			?>
+    		<a href="create.php">Create New Post</a>
+    		<?php 
+    			endif 
+    		?>
 			<h2>Posts</h2>
-			<?php while (($row = $statement->fetch()) && $count < 5): ?>
+			<?php while (($row = $statement->fetch())): ?>
 		      		<div class="container">
 		      			<div class="row">
     						<div class="col-sm">
-    							<p>
-    								<h5><?=$row['title']?></h5>
+    							<h5><?=$row['title']?></h5>
+    							<p>    								
     								<?php
 	    								if(isset($row['contentDescription'])):
     								?>
@@ -60,6 +98,16 @@
     								endif;
     								?>
     								<a href="fullPost.php?id=<?=$row['postID']?>">View Post</a>
+				      				<?php 
+				      					if (isset($_SESSION) && isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1):
+				      				?>
+    										| 
+    									<a href="news.php?delete=1&id=<?=$row['postID']?>">Delete Post</a>
+    										| 
+    									<a href="edit.php?title=<?=$row['title']?>&postID=<?=$row['postID']?>">Edit Post</a>
+    								<?php 
+    									endif 
+    								?>
     							</p>
     						</div>
 		      			</div>	      			
