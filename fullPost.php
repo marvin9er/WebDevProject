@@ -13,22 +13,36 @@
 		$query = "SELECT * FROM posts WHERE postID = {$postID}";
     	$statement = $db->prepare($query);
     	$statement->execute();
-
     	$titleStatement = $db->prepare($query);
     	$titleStatement->execute();
     	$titleRow = $titleStatement->fetch();
+
+
+    	$statement2 = $db->prepare($query);
+    	$statement2->execute();
+    	$postRow = $statement2->fetch();
+
+    	$postName = substr($postRow['contentFile'], 0, strpos($postRow['contentFile'], '.'));
+
+    	echo $postRow['contentFile'];
+
+    	echo $postName;
 	}
 
 
 	function getContent($contentType, $contentFile)
 	{
+		$image_extensions = ['gif', 'jpg', 'jpeg', 'png'];
+
+
+
 		if($contentType == 'txt')
 		{
 			return 0;
 		}else if($contentType == 'mp4')
 		{
 			return 1;
-		}else if($contentType == 'jpg')
+		}else if(in_array($contentType, $image_extensions))
 		{
 			return 2;
 		}else
@@ -36,6 +50,7 @@
 			return 3;
 		}
 	}
+
 
 
 ?>
@@ -59,8 +74,13 @@
 				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
 				<li class="breadcrumb-item"><a href="about.php">About</a></li>
 				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
-				<li class="breadcrumb-item"><a href="News.php">News</a></li>
+				<li class="breadcrumb-item"><a href="news.php">News</a></li>
 				<li class="breadcrumb-item"><a href="faq.php">FAQ</a></li>
+				<?php if (isset($_COOKIE["User"])):?>
+					<li class="breadcrumb-item"><a href="signout.php">Sign Out</a></li>
+				<?php else: ?>
+					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
+				<?php endif ?>
 			</ol>
 		</nav>
 		<div id="content">
@@ -75,15 +95,15 @@
 		      			
 		      			switch (getContent($row['contentType'],$row['contentFile'])) {
 		      				case 0:
-		      					$myfile = fopen("content/".$row['contentFile'].".txt", "r") or die("Unable to open file!");
-								echo fread($myfile,filesize("content/".$row['contentFile'].".txt"));
+		      					$myfile = fopen("Content/".$postName.".txt", "r") or die("Unable to open file!");
+								echo fread($myfile,filesize("Content/".$postName.".txt"));
 								fclose($myfile);
 	      					break;
 
 		      				case 1:
 		      					?>
 		      					<video controls>
-		      					<source src="content/<?=$row['contentFile']?>.<?=$row['contentType']?>" type="video/<?=$row['contentType']?>">
+		      					<source src="Content/<?=$postName?>.<?=$row['contentType']?>" type="video/<?=$row['contentType']?>">
 								Your browser does not support the video tag.
 								</video>
 							<?php
@@ -91,12 +111,8 @@
 		      				
 		      				case 2:
 		      				?>
-		      					<img src="content/<?=$row['contentFile']?>.<?=$row['contentType']?>" alt="$row['contentFile']">
+		      					<img src="Content/<?=$postName?>.<?=$row['contentType']?>" alt="<?=$row['contentFile']?>">
 		      				<?php
-		      					break;
-
-		      				default:
-		      					echo "No content associated with this ID.";
 		      					break;
 		      			}
 		      			?>
