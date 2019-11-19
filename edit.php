@@ -2,11 +2,12 @@
 	if (!isset($_COOKIE["User"]))
 	{
 		header('Location: http://localhost:31337/WebDevProject/index.php');
+		die();
 	}
 
 	include 'connect.php';
 
-	$title = filter_input(INPUT_GET, 'title', FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+	$title = filter_input(INPUT_GET, 'title', FILTER_SANITIZE_MAGIC_QUOTES);
 
 	$postID = "";
 
