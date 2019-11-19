@@ -26,8 +26,13 @@
 				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
 				<li class="breadcrumb-item"><a href="about.php">About</a></li>
 				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
-				<li class="breadcrumb-item"><a href="News.php">News</a></li>
+				<li class="breadcrumb-item"><a href="news.php">News</a></li>
 				<li class="breadcrumb-item active" aria-current="page">FAQ</li>
+				<?php if (isset($_COOKIE["User"])):?>
+					<li class="breadcrumb-item"><a href="signout.php">Sign Out</a></li>
+				<?php else: ?>
+					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
+				<?php endif ?>
 			</ol>
 		</nav>
 		<div id="content">
