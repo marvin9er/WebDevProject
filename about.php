@@ -1,6 +1,10 @@
 <?php 
 	include 'connect.php';
 
+	if (isset($_COOKIE["User"])) {
+		session_start();
+	}
+
 
 	$query = "SELECT * FROM posts WHERE title LIKE 'About';";
     $statement = $db->prepare($query);
@@ -27,12 +31,24 @@
 				<li class="breadcrumb-item"><a href="index.php">Home</a></li>
 				<li class="breadcrumb-item active" aria-current="page">About</li>
 				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
-				<li class="breadcrumb-item"><a href="News.php">News</a></li>
+				<li class="breadcrumb-item"><a href="news.php">News</a></li>
 				<li class="breadcrumb-item"><a href="faq.php">FAQ</a></li>
+				<?php if (isset($_COOKIE["User"])):?>
+					<li class="breadcrumb-item"><a href="signout.php">Sign Out</a></li>
+				<?php else: ?>
+					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
+				<?php endif ?>
 			</ol>
 		</nav>
 		<div id="content">
 			<h2>About</h2>
+			<?php 
+				if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+			?>
+			<a href="edit.php?title=<?=$row['title']?>&postID=<?=$row['postID']?>">Edit</a>
+    		<?php 
+    			endif 
+    		?>
 			<p>
 				<?=$row['contentDescription']?>
 			</p>
