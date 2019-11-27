@@ -39,16 +39,24 @@
 	if (isset($_POST['contentArea']) && filter_input(INPUT_GET, 'postID', FILTER_VALIDATE_INT))
 	{
 		$postID = filter_input(INPUT_GET, "postID", FILTER_SANITIZE_NUMBER_INT);
+		$postID2 = filter_input(INPUT_GET, "postID", FILTER_SANITIZE_NUMBER_INT);
 		$contentDescription = filter_input(INPUT_POST, "contentArea", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 
 		if(!empty($_POST["remove"]))
 		{
-   			$statement = $db->prepare("UPDATE posts SET contentDescription=:description, contentType=null, contentFile=null WHERE postID=:id;");
-   			$statement->bindParam(':description', $contentDescription);
-    		$statement->bindParam(':id', $postID);
-    		$statement->execute();
+			$fileStatement = $db->prepare("SELECT contentFile FROM posts WHERE postID=:id;");
+			$fileStatement->bindParam(':id', $postID);
+			$fileStatement->execute();
+			$filename = $fileStatement->fetch();
 
-		}
+			unlink("content/".$filename['contentFile']);
+			
+
+   			$statement = $db->prepare("UPDATE posts SET contentDescription=:description, contentType=null, contentFile=null WHERE postID=:postId");
+   			$statement->bindParam(':description', $contentDescription);
+    		$statement->bindParam(':postId', $postID2);
+    		$statement->execute();
+    	}
 		else
 		{		
    			$statement = $db->prepare("UPDATE posts SET contentDescription=:description WHERE postID=:id");
@@ -109,7 +117,8 @@
     							<p>    								
     								<?php
 	    								if(isset($row['contentDescription'])):
-    								?>
+    								?>	
+    									<p>
 	    								<?php if(strlen($row['contentDescription']) < 200) :?>						      			
 	    								<?=$row['contentDescription']?>
 	    								<br>
@@ -119,6 +128,7 @@
 						      			<?php
     									endif;
     									?>
+    									</p>
     								<?php
     								endif;
     								?>
