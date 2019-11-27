@@ -1,6 +1,8 @@
 <?php
 	include 'connect.php';
 
+	$count = 0;
+
 	if(isset($_POST['username']) && isset($_POST['password']))
 	{
 		$username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
@@ -39,7 +41,9 @@
 
 
 
-
+	$selectQuery = "SELECT * FROM posts ORDER BY date_posted DESC;";
+    $selectStatement = $db->prepare($selectQuery);
+    $selectStatement->execute();
 ?>
 
 
@@ -77,9 +81,46 @@
 
 		</nav>
 		<div id="content">
-			<p>
-				
-			</p>
+			<?php while (($row = $selectStatement->fetch()) && $count < 5): ?>
+		      		<div class="container">
+		      			<div class="row">
+    						<div class="col-sm">
+    							<h5><?=$row['title']?></h5>
+    							<p>    								
+    								<?php
+	    								if(isset($row['contentDescription'])):
+    								?>
+	    								<?php if(strlen($row['contentDescription']) < 200) :?>						      			
+	    								<?=$row['contentDescription']?>
+	    								<br>
+						      			<?php else:?>
+						      				<?= substr($row['contentDescription'], 0, 200) ?>
+						      				<br>
+						      			<?php
+    									endif;
+    									?>
+    								<?php
+    								endif;
+    								?>
+    								<a href="fullPost.php?id=<?=$row['postID']?>">View Post</a>
+				      				<?php 
+				      					if (isset($_SESSION) && isset($_SESSION['isAdmin']) && $_SESSION['isAdmin'] == 1):
+				      				?>
+    										| 
+    									<a href="news.php?delete=1&id=<?=$row['postID']?>">Delete Post</a>
+    										| 
+    									<a href="edit.php?title=<?=$row['title']?>&postID=<?=$row['postID']?>">Edit Post</a>
+    								<?php 
+    									endif 
+    								?>
+    							</p>
+    						</div>
+		      			</div>	      			
+		      		</div>
+		   		<?php
+		   			$count++;
+		   			endwhile 
+		   		?>
 		</div>
 	</div>
 </body>
