@@ -38,14 +38,25 @@
 
 	if (isset($_POST['contentArea']) && filter_input(INPUT_GET, 'postID', FILTER_VALIDATE_INT))
 	{
-
 		$postID = filter_input(INPUT_GET, "postID", FILTER_SANITIZE_NUMBER_INT);
 		$contentDescription = filter_input(INPUT_POST, "contentArea", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
+
+		if(!empty($_POST["remove"]))
+		{
+   			$statement = $db->prepare("UPDATE posts SET contentDescription=:description, contentType=null, contentFile=null WHERE postID=:id;");
+   			$statement->bindParam(':description', $contentDescription);
+    		$statement->bindParam(':id', $postID);
+    		$statement->execute();
+
+		}
+		else
+		{		
+   			$statement = $db->prepare("UPDATE posts SET contentDescription=:description WHERE postID=:id");
+   			$statement->bindParam(':description', $contentDescription);
+    		$statement->bindParam(':id', $postID);
+    		$statement->execute();
+		}
 		
-   		$statement = $db->prepare("UPDATE posts SET contentDescription=:description WHERE postID=:id");
-   		$statement->bindParam(':description', $contentDescription);
-    	$statement->bindParam(':id', $postID);
-    	$statement->execute();
 	}
 
 
