@@ -43,6 +43,8 @@
     		$newPostStatement->bindValue(':contentFile', $upload_filename);        
     		$newPostStatement->bindValue(':contentDescription', $description);
   			$newPostStatement->execute();
+
+  			header('Location: http://localhost:31337/WebDevProject/index.php');	
     	}
     }
     function file_type($temporary_path, $new_path) {
