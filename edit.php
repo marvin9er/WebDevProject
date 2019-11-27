@@ -1,5 +1,7 @@
 <?php
-	if (!isset($_COOKIE["User"]))
+	session_start();
+
+	if (!isset($_COOKIE["User"]) && !$_SESSION['isAdmin'] == 1)
 	{
 		header('Location: http://localhost:31337/WebDevProject/index.php');
 		die();
@@ -14,6 +16,14 @@
 	if(filter_input(INPUT_GET, 'postID', FILTER_VALIDATE_INT))
 	{
 		$postID = filter_input(INPUT_GET, 'postID', FILTER_SANITIZE_NUMBER_INT);
+
+		$query = "SELECT * FROM posts WHERE postID = {$postID}";
+
+		$statement2 = $db->prepare($query);
+    	$statement2->execute();
+    	$postRow = $statement2->fetch();
+
+    	$postName = substr($postRow['contentFile'], 0, strpos($postRow['contentFile'], '.'));
 	}
 
 	$query = "SELECT * FROM posts WHERE title LIKE '$title' AND postID LIKE '$postID';";
@@ -23,7 +33,26 @@
     $row = $statement->fetch();
 
 
+    function getContent($contentType, $contentFile)
+	{
+		$image_extensions = ['gif', 'jpg', 'jpeg', 'png'];
 
+
+
+		if($contentType == 'txt')
+		{
+			return 0;
+		}else if($contentType == 'mp4')
+		{
+			return 1;
+		}else if(in_array($contentType, $image_extensions))
+		{
+			return 2;
+		}else
+		{
+			return 3;
+		}
+	}
 ?>
 
 
@@ -59,7 +88,36 @@
 		</nav>
 		<div id="content">
 			<h2><?=$row['title']?></h2>
-			<form action="index.php?postID=<?=$postID?>" method="post">
+			<form action="index.php?postID=<?=$postID?>" method="post">				
+				<?php
+			      			
+			      			switch (getContent($row['contentType'],$row['contentFile'])) {
+			      				case 0:
+			      					$myfile = fopen("Content/".$postName.".txt", "r") or die("Unable to open file!");
+									echo fread($myfile,filesize("Content/".$postName.".txt"));
+									fclose($myfile);
+		      					break;
+
+			      				case 1:
+			      					?>
+			      					<video controls>
+			      					<source src="Content/<?=$postName?>.<?=$row['contentType']?>" type="video/<?=$row['contentType']?>">
+									Your browser does not support the video tag.
+									</video>
+								<?php
+			      					break;
+			      				
+			      				case 2:
+			      				?>
+			      					<img src="Content/<?=$postName?>.<?=$row['contentType']?>" alt="<?=$row['contentFile']?>" width="300">
+			      				<?php
+			      					break;
+			      			}
+			      	?>
+
+			    <br><input type="checkbox" name="remove" value="file"> Remove File<br>
+
+				<br>
 				<div class="form-group">
 					<label for="contentArea">Content</label>
 					<textarea class="form-control" id="contentArea" name="contentArea" rows="10"><?=$row['contentDescription']?></textarea>
