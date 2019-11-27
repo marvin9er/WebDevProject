@@ -15,11 +15,15 @@
 			if(isset($postID) && isset($delete) && $delete == 1)
 			{
 				$id = $postID;
-        		$stmt = $db->prepare( "DELETE FROM posts WHERE postID =:id" );
-        		$stmt->bindParam(':id', $id);
-        		$stmt->execute();
-        		if( ! $stmt->rowCount() ) echo "Deletion failed";
-        		header('Location: http://localhost:31337/WebDevProject/index.php');
+
+				$stmt1 = $db->prepare( "DELETE FROM comments WHERE postID =:id" );
+        		$stmt1->bindParam(':id', $id);
+        		$stmt1->execute();
+
+        		$stmt2 = $db->prepare( "DELETE FROM posts WHERE postID =:id" );
+        		$stmt2->bindParam(':id', $id);
+        		$stmt2->execute();
+        		header("Location: http://localhost:31337/WebDevProject/index.php");
 			}
 		}
 	}
@@ -90,7 +94,7 @@
 	    								<?=$row['contentDescription']?>
 	    								<br>
 						      			<?php else:?>
-						      				<?= substr($row['contentDescription'], 0, 200) ?>
+						      				<p><?= substr($row['contentDescription'], 0, 200) ?></p>
 						      				<br>
 						      			<?php
     									endif;
