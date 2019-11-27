@@ -68,7 +68,7 @@
 
 		<div id="content">
 			<?php 
-				if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+				if (isset($_SESSION) && $_SESSION['isAdmin'] == 1):
 			?>
     		<a href="create.php">Create New Post</a>
     		<?php 
@@ -99,7 +99,7 @@
 				      				<a href="fullPost.php?id=<?=$row['postID']?>">View Episode</a>
 				      					
 				      				<?php 
-				      					if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+				      					if (isset($_SESSION) && $_SESSION['isAdmin'] == 1):
 				      				?>
     										| 
     									<a href="episodes.php?delete=1&id=<?=$row['postID']?>">Delete Post</a>

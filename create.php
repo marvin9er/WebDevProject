@@ -1,5 +1,5 @@
 <?php
-	if (!isset($_COOKIE["User"]))
+	if (!isset($_COOKIE["User"]) && !$_SESSION['isAdmin'] == 1)
 	{
 		header('Location: http://localhost:31337/WebDevProject/index.php');		
 		die();

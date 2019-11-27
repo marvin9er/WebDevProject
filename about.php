@@ -46,7 +46,7 @@
 		<div id="content">
 			<h2>About</h2>
 			<?php 
-				if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+				if (isset($_SESSION) && $_SESSION['isAdmin'] == 1):
 			?>
 			<a href="edit.php?title=<?=$row['title']?>&postID=<?=$row['postID']?>">Edit</a>
     		<?php 

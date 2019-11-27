@@ -19,6 +19,7 @@
         		$stmt->bindParam(':id', $id);
         		$stmt->execute();
         		if( ! $stmt->rowCount() ) echo "Deletion failed";
+        		header('Location: http://localhost:31337/WebDevProject/index.php');
 			}
 		}
 	}
@@ -69,7 +70,7 @@
 
 		<div id="content">			
 			<?php 
-				if (isset($_SESSION) && isset($_SESSION['isAdmin']) == 1):
+				if (isset($_SESSION) && $_SESSION['isAdmin'] == 1):
 			?>
     		<a href="create.php">Create New Post</a>
     		<?php 
