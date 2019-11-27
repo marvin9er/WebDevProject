@@ -1,6 +1,16 @@
 <?php 
 	include 'connect.php';
 
+	if (isset($_COOKIE["User"]))
+	{
+		session_start();
+		$userLoggedIn = 1;
+	}
+	else
+	{
+		$userLoggedIn = 0;
+	}
+
 	$errorflag = false;
 
 	if(!filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT))
@@ -23,10 +33,6 @@
     	$postRow = $statement2->fetch();
 
     	$postName = substr($postRow['contentFile'], 0, strpos($postRow['contentFile'], '.'));
-
-    	echo $postRow['contentFile'];
-
-    	echo $postName;
 	}
 
 
@@ -52,7 +58,14 @@
 	}
 
 
+	if (isset($_POST['commentContent']))
+    {
+    	$errorflag = 1;
+    }
+    else
+    {
 
+    }
 ?>
 
 <!DOCTYPE html>
@@ -123,6 +136,24 @@
 		      		</div>
 		   	<?php endwhile ?>
 		</div>
+		<?php if($userLoggedIn == 1): ?>
+			<div id="commentBox">
+				<form method="post" enctype="multipart/form-data">
+					<div class="form-group">
+						<label for="commentContent">Comment</label>
+						<textarea class="form-control" id="commentContent" name="commentContent" rows="5" maxlength="250"></textarea>
+					</div>
+					<button type="submit" class="btn btn-secondary">Submit</button>
+				</form>		
+			</div>
+		<?php else:?>
+			<div class="alert alert-secondary" role="alert">
+				<a href="login.php">Log in</a> to post a Comment.
+			</div>
+		<?php endif?>
+			<div id="comments">
+				
+			</div>
 	</div>
 </body>
 </html>

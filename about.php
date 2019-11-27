@@ -1,8 +1,11 @@
 <?php 
 	include 'connect.php';
 
+	$userLoggedIn = 0;
+
 	if (isset($_COOKIE["User"])) {
 		session_start();
+		$userLoggedIn = 1;
 	}
 
 
@@ -33,7 +36,7 @@
 				<li class="breadcrumb-item"><a href="episodes.php">Episodes</a></li>
 				<li class="breadcrumb-item"><a href="news.php">News</a></li>
 				<li class="breadcrumb-item"><a href="faq.php">FAQ</a></li>
-				<?php if (isset($_COOKIE["User"])):?>
+				<?php if ($userLoggedIn == 1):?>
 					<li class="breadcrumb-item"><a href="signout.php">Sign Out</a></li>
 				<?php else: ?>
 					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
