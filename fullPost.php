@@ -57,15 +57,40 @@
 		}
 	}
 
+	if (isset($_GET['replyID']) && filter_input(INPUT_GET, 'replyID', FILTER_VALIDATE_INT))
+	{
+		$replyID = filter_input(INPUT_GET, 'replyID', FILTER_SANITIZE_NUMBER_INT);
+	}
 
-	if (isset($_POST['commentContent']))
+	if (!isset($_POST['commentContent']))
     {
-    	$errorflag = 1;
+    	$errorflag = true;
     }
-    else
+    else if (filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT))
     {
+    	$postID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
+    	$comment = filter_input(INPUT_POST, 'commentContent', FILTER_SANITIZE_SPECIAL_CHARS);
+    	$userID = $_COOKIE['User'];
 
+
+    	$commentQuery = "INSERT INTO comments (userID, postID, content) values (:userID, :postID, :content)";
+    	$commentStatement = $db->prepare($commentQuery);   		
+		$commentStatement->bindValue(':userID', $userID);        
+		$commentStatement->bindValue(':postID', $postID);        
+		$commentStatement->bindValue(':content', $comment);
+		$commentStatement->execute();
     }
+
+
+    $commentSelectQuery = "SELECT * FROM comments WHERE postID = {$postID} ORDER BY date_posted DESC;";
+    $commentSelectStatement = $db->prepare($commentSelectQuery);
+    $commentSelectStatement->execute();
+
+    $row = $commentSelectStatement->fetch();
+
+    $commentSelectStatement2 = $db->prepare($commentSelectQuery);
+    $commentSelectStatement2->execute();
+
 ?>
 
 <!DOCTYPE html>
@@ -96,7 +121,7 @@
 				<?php endif ?>
 			</ol>
 		</nav>
-		<div id="content">
+		<div id="content" class="container">
 			<?php while (($row = $statement->fetch())): ?>
 		      		<div>
 		      			<h2><?= $row['title'] ?></h2>
@@ -124,7 +149,7 @@
 		      				
 		      				case 2:
 		      				?>
-		      					<img src="Content/<?=$postName?>.<?=$row['contentType']?>" alt="<?=$row['contentFile']?>">
+		      					<img src="Content/<?=$postName?>.<?=$row['contentType']?>" alt="<?=$row['contentFile']?>" width="1000">
 		      				<?php
 		      					break;
 		      			}
@@ -137,7 +162,7 @@
 		   	<?php endwhile ?>
 		</div>
 		<?php if($userLoggedIn == 1): ?>
-			<div id="commentBox">
+			<div id="commentBox" class="container">
 				<form method="post" enctype="multipart/form-data">
 					<div class="form-group">
 						<label for="commentContent">Comment</label>
@@ -151,8 +176,31 @@
 				<a href="login.php">Log in</a> to post a Comment.
 			</div>
 		<?php endif?>
-			<div id="comments">
-				
+			<div id="comments" class="container">
+				<?php while ($row2 = $commentSelectStatement2->fetch()): ?>
+		      		<div class="container">
+		      			<div class="row">
+    						<div class="col-sm">
+    							<h5>
+    								<?php  
+    									$userQuery = "SELECT * FROM users WHERE userID LIKE {$row2['userID']}";
+    									$userStatement = $db->prepare($userQuery);
+    									$userStatement->execute();
+
+    									$user = $userStatement->fetch();
+
+    									echo $user['username'];
+    								?>    								
+    							</h5>
+				      			<p>
+				      				<?=$row2['content']?>
+				      			</p>
+				      		</div>
+				      	</div>	      			
+		      		</div>
+		   		<?php 
+		   			endwhile 
+		   		?>
 			</div>
 	</div>
 </body>
