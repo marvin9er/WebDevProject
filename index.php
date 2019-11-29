@@ -1,6 +1,8 @@
 <?php
 	include 'connect.php';
 
+	$loginTried = false;
+
 	$count = 0;
 
 	$userLoggedIn = 0;
@@ -12,6 +14,9 @@
 
 	if(isset($_POST['username']) && isset($_POST['password']))
 	{
+		$loginTried = true;
+
+
 		$username = filter_input(INPUT_POST, "username", FILTER_SANITIZE_FULL_SPECIAL_CHARS);
 		$password = filter_input(INPUT_POST, "password", FILTER_SANITIZE_EMAIL);
 
@@ -32,7 +37,11 @@
 			$cookie_value = $row['userID'];
 			setcookie($cookie_name, $cookie_value, time() + (3600), "/");
 
-			
+			$success = true;
+        }
+        else
+        {
+        	$success = false;
         }
 	}
 
@@ -48,7 +57,8 @@
 			$fileStatement->bindParam(':id', $postID);
 			$fileStatement->execute();
 			$filename = $fileStatement->fetch();
-
+			
+			error_reporting(E_ALL ^ E_WARNING);
 			unlink("content/".$filename['contentFile']);
 			
 
@@ -86,8 +96,25 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<link href="https://fonts.googleapis.com/css?family=Finger+Paint&display=swap" rel="stylesheet"> 
 	<link rel="stylesheet" type="text/css" href="extraCSS.css">
+	<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 </head>
 <body>
+	<?php if (isset($success)): ?>
+		<?php if ($success): ?>
+			<script>
+				$(document).ready(function(){
+					alert('Login Success!');
+				});
+  			</script>
+		<?php else: ?>			
+        	<script>
+				$(document).ready(function(){
+					alert('Login Failed!');
+				});
+  			</script>
+		<?php endif ?>
+
+	<?php endif ?>
 	<div id="mainContainer" class="container">
 		<div class="jumbotron">
 			<h1 class="display-4" id="fontChange"><a href="index.php">AWAKENING</a></h1>
@@ -106,7 +133,6 @@
 					<li class="breadcrumb-item"><a href="login.php">Login</a></li>
 				<?php endif ?>
 			</ol>
-
 		</nav>
 		<div id="content">
 			<?php while (($row = $selectStatement->fetch()) && $count < 5): ?>
