@@ -114,9 +114,10 @@
 			      					break;
 			      			}
 			      	?>
-
-			    <br><input type="checkbox" name="remove" value="file"> Remove File<br>
-
+			    <?php if (!$row['contentFile'] == null || !$row['contentType'] == null): ?>			    		    	
+				    <br>
+				    <input type="checkbox" name="remove" value="file"> Remove File<br>
+			    <?php endif ?>
 				<br>
 				<div class="form-group">
 					<label for="contentArea">Content</label>
