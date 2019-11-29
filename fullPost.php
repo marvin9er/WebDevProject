@@ -66,7 +66,8 @@
     {
     	$errorflag = true;
     }
-    else if (filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT))
+
+    else if (filter_input(INPUT_GET, 'id', FILTER_VALIDATE_INT) && filter_input(INPUT_POST, 'commentContent', FILTER_SANITIZE_SPECIAL_CHARS))
     {
     	$postID = filter_input(INPUT_GET, 'id', FILTER_SANITIZE_NUMBER_INT);
     	$comment = filter_input(INPUT_POST, 'commentContent', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -194,6 +195,11 @@
     							</h5>
 				      			<p>
 				      				<?=$row2['content']?>
+				      				<?php if (isset($_COOKIE["User"]) && $_SESSION['isAdmin'] == 1): ?>
+				      					<br>
+				      					<a href="deleteComment.php?commentIDtoDelete=<?=$row2['commentID']?>">Delete Comment</a>
+				      					<br>
+				      				<?php endif ?>
 				      			</p>
 				      		</div>
 				      	</div>	      			
